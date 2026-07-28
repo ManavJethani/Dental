@@ -84,7 +84,16 @@ function App() {
     </main>
 
     <footer id="contact"><div className="container footer-grid"><div><h3>SARASWATI</h3><p>Multispeciality Dental Clinic</p><p>Gurugram's trusted destination for advanced dental implants, cosmetic dentistry, and complete oral care.</p></div><div><h4>Treatments</h4>{services.slice(0, 6).map(([name]) => <a href="#services" key={name}>{name}</a>)}</div><div><h4>Contact</h4><p>1st Floor, H. No 102/8, Behind Pasricha Hospital, Model Town, Sector 11, Gurugram, Haryana 122001</p><a href="tel:+916360454121">+91 63604 54121</a><p>Mon - Sat: 10:00 AM - 8:00 PM<br />Sunday: 10:00 AM - 2:00 PM</p></div></div><div className="container footer-bottom">© 2026 Saraswati Dental Clinic. All rights reserved.<span>Privacy Policy &nbsp;&nbsp; Terms</span></div></footer>
-    <div className="floating"><a href="https://wa.me/916360454121">◔</a><a href="tel:+916360454121">☎</a><a href="#book">□</a></div>
+    <div className="floating">
+      <a className="floating-button floating-whatsapp" href="https://wa.me/916360454121" aria-label="Chat on WhatsApp">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true">
+          <path d="M17.472 14.382c-.297-.149-1.758-.866-2.03-.967-.273-.1-.47-.149-.668.15-.198.297-.767.967-.94 1.166-.173.198-.347.223-.644.075-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.173.198-.297.297-.496.099-.198.05-.372-.025-.52-.075-.148-.668-1.611-.916-2.207-.242-.579-.487-.5-.668-.51-.173-.01-.372-.012-.57-.012-.198 0-.52.074-.792.372-.273.297-1.042 1.016-1.042 2.479s1.067 2.876 1.216 3.074c.149.198 2.1 3.2 5.076 4.487.71.306 1.262.489 1.694.626.712.225 1.36.193 1.872.117.571-.085 1.758-.719 2.007-1.413.248-.694.248-1.289.173-1.414-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12.004 2.003C6.488 2.003 2 6.487 2 12.003c0 2.116.653 4.073 1.76 5.708L2 22l4.42-1.137c1.568.855 3.337 1.315 5.584 1.315 5.516 0 10-4.484 10-10 0-5.516-4.484-10-10-10zm0 18.777c-2.04 0-3.93-.624-5.54-1.694l-.395-.235-2.62.674.7-2.557-.257-.417C3.1 15.3 2.5 13.696 2.5 12.003 2.5 7.167 6.168 3.5 11.004 3.5c4.836 0 8.504 3.667 8.504 8.503 0 4.836-3.668 8.777-8.504 8.777z"/>
+        </svg>
+      </a>
+      <a className="floating-button floating-call" href="tel:+916360454121" aria-label="Call clinic">☎</a>
+      <a className="floating-button floating-book" href="#book" aria-label="Book consultation">📅</a>
+    </div>
   </div>
 }
 

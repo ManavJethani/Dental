@@ -58,10 +58,30 @@ function GalleryCard({ item }: { item: string[] }) {
 
 function App() {
   const [submitted, setSubmitted] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
   return <div>
     <nav className="site-nav">
-      <div className="container nav-inner"><a href="#top" className="brand">SARASWATI</a><div className="nav-links">{navItems.map((label) => <a key={label} href={`#${label.toLowerCase()}`}>{label}</a>)}<a className="nav-button" href="#book">Book Consultation</a></div></div>
+      <div className="container nav-inner">
+        <a href="#top" className="brand">SARASWATI</a>
+        <div className="nav-actions">
+          <div className="nav-links">{navItems.map((label) => <a key={label} href={`#${label.toLowerCase()}`} onClick={() => setMenuOpen(false)}>{label}</a>)}</div>
+          <a className="nav-button" href="#book" onClick={() => setMenuOpen(false)}>Book Consultation</a>
+          <button className="mobile-menu-toggle" aria-label={menuOpen ? 'Close navigation' : 'Open navigation'} aria-expanded={menuOpen} onClick={() => setMenuOpen((open) => !open)}>
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
+      </div>
     </nav>
+
+    <div className={`mobile-drawer${menuOpen ? ' open' : ''}`}>
+      <button className="mobile-drawer-close" aria-label="Close menu" onClick={() => setMenuOpen(false)}>×</button>
+      <div className="mobile-drawer-links">
+        {navItems.map((label) => <a key={label} href={`#${label.toLowerCase()}`} onClick={() => setMenuOpen(false)}>{label}</a>)}
+      </div>
+    </div>
+    <div className={`mobile-backdrop${menuOpen ? ' active' : ''}`} onClick={() => setMenuOpen(false)} />
 
     <main id="top">
       <section className="hero">

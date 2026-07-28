@@ -1,10 +1,10 @@
-:root { --navy:#061a30; --deep:#0a2e5d; --blue:#0d6efd; --cyan:#00c2ff; --muted:#6b7b8d; --pale:#f6f8fa; }
+:root { --navy:#061a30; --deep:#0a2e5d; --blue:#0d6efd; --cyan:#00c2ff; --muted:#6b7b8d; --pale:#f6f8fa; --safe-area-top:env(safe-area-inset-top, 0px); }
 * { box-sizing:border-box; }
 html { scroll-behavior:smooth; }
-body { margin:0; color:var(--deep); background:#fff; }
+body { margin:0; color:var(--deep); background:#fff; padding-top:var(--safe-area-top); }
 a { color:inherit; text-decoration:none; }
 .container { width:min(1280px, calc(100% - 48px)); margin:auto; }
-.site-nav { position:fixed; inset:0 0 auto; z-index:10; height:64px; color:#fff; background:rgba(6,26,48,.92); backdrop-filter:blur(12px); }
+.site-nav { position:fixed; inset:var(--safe-area-top) 0 auto; z-index:10; height:64px; color:#fff; background:rgba(6,26,48,.92); backdrop-filter:blur(12px); }
 .nav-inner { height:64px; display:flex; align-items:center; justify-content:space-between; }
 .nav-actions { display:flex; align-items:center; gap:12px; }
 .brand { font-family:'Playfair Display',serif; font-size:18px; font-weight:600; letter-spacing:.04em; flex-shrink:0; }

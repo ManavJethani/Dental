@@ -1,4 +1,16 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useState, type ChangeEvent, type FormEvent } from 'react'
+
+type GoogleReview = {
+  id: string
+  author: string
+  authorPhoto: string | null
+  authorUri: string | null
+  rating: number
+  text: string
+  languageCode: string
+  relativeTime: string
+  googleMapsUri: string | null
+}
 
 const services = [
   ['Dental Implants', 'Permanent tooth replacement using titanium implants.'],
@@ -65,6 +77,33 @@ function App() {
     treatment: '',
     date: '',
   })
+  const [googleReviews, setGoogleReviews] = useState<GoogleReview[] | null>(null)
+  const [googleReviewsError, setGoogleReviewsError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchGoogleReviews = async () => {
+      try {
+        const response = await fetch('/api/google-reviews')
+        const payload = await response.json()
+
+        if (!response.ok) {
+          setGoogleReviewsError(payload.error || 'Unable to load reviews')
+          return
+        }
+
+        setGoogleReviews(payload.reviews || [])
+      } catch (error) {
+        console.error('Failed to fetch Google reviews', error)
+        setGoogleReviewsError('Unable to load reviews')
+      }
+    }
+
+    fetchGoogleReviews()
+  }, [])
+
+  const reviewItems = googleReviews
+    ? googleReviews.map((review) => [review.author, review.relativeTime || 'Google review', review.text] as const)
+    : reviews
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -129,7 +168,7 @@ function App() {
 
       <section id="gallery" className="section gallery"><div className="container"><div className="center"><p className="eyebrow cyan">Smile Gallery</p><h2>Smile Transformations</h2><p className="lead">Real results from real patients. See the life-changing transformations achieved at Saraswati Dental.</p></div><div className="gallery-grid">{gallery.map((item) => <GalleryCard item={item} key={item[0]} />)}</div></div></section>
 
-      <section id="reviews" className="section white"><div className="container reviews-layout"><div className="review-summary"><p className="eyebrow blue-text">Testimonials</p><h2>What Our Patients Say</h2><strong>4.9</strong><div className="stars">★★★★★</div><p>Rated <b>Excellent</b> by our patients</p><p><b>112+</b> Google Reviews</p></div><div className="review-scroll">{reviews.map(([name, treatment, text]) => <article className="review-card" key={name}><i>“</i><p>{text}</p><div className="stars small">★★★★★</div><h3>{name}</h3><span>{treatment}</span></article>)}</div></div></section>
+      <section id="reviews" className="section white"><div className="container reviews-layout"><div className="review-summary"><p className="eyebrow blue-text">Testimonials</p><h2>What Our Patients Say</h2><strong>4.9</strong><div className="stars">★★★★★</div><p>Rated <b>Excellent</b> by our patients</p><p><b>112+</b> Google Reviews</p>{googleReviewsError ? <p className="lead" style={{ color: '#ffb3b3', marginTop: '16px' }}>Unable to load live Google reviews; showing fallback testimonials.</p> : null}</div><div className="review-scroll">{reviewItems.map(([name, treatment, text]) => <article className="review-card" key={`${name}-${treatment}-${text.slice(0, 12)}`}><i>“</i><p>{text}</p><div className="stars small">★★★★★</div><h3>{name}</h3><span>{treatment}</span></article>)}</div></div></section>
 
       <section id="book" className="section booking"><div className="container"><p className="eyebrow blue-text">Book Appointment</p><h2>Get Your Personalized Treatment Plan</h2><div className="booking-grid"><div className="form-card">{submitted ? <div className="thank-you"><span>✓</span><h3>Thank You!</h3><p>We've sent your request to WhatsApp. Our team will get back to you within 30 minutes.</p></div> : <form onSubmit={handleSubmit}><label>Your Name<input required name="name" value={formData.name} onChange={handleInputChange} placeholder="Enter your full name" /></label><label>Phone Number<input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Enter your phone number" /></label><label>Treatment Interest<select required name="treatment" value={formData.treatment} onChange={handleInputChange}><option value="" disabled>Select a treatment</option>{services.slice(0, 8).map(([name]) => <option key={name}>{name}</option>)}</select></label><label>Preferred Date<input required type="date" name="date" value={formData.date} onChange={handleInputChange} /></label><button className="button blue" type="submit">Request Callback</button></form>}</div><div className="contact-list"><h3>Or reach us directly:</h3><p><b>◉ Phone</b><a href="tel:+916360454121">+91 63604 54121</a></p><p><b>⌖ Address</b><span>1st Floor, H. No 102/8, Behind Pasricha Hospital, Model Town, Sector 11, Gurugram, Haryana 122001</span></p><p><b>◷ Clinic Hours</b><span>Mon - Sat: 10:00 AM - 8:00 PM<br />Sunday: 10:00 AM - 2:00 PM</span></p><a className="button whatsapp" href="https://wa.me/916360454121">◔ Chat on WhatsApp</a></div></div></div></section>
     </main>

@@ -7,8 +7,16 @@ export default async function handler(req, res) {
     });
   }
 
+
   const apiKey = process.env.GOOGLE_PLACES_API_KEY ?? process.env.VITE_GOOGLE_PLACES_API_KEY
   const placeId = process.env.GOOGLE_PLACE_ID ?? process.env.VITE_GOOGLE_PLACE_ID
+
+  console.log({
+  hasApiKey: Boolean(process.env.GOOGLE_PLACES_API_KEY),
+  hasPlaceId: Boolean(process.env.GOOGLE_PLACE_ID),
+  viteHasApiKey: Boolean(process.env.VITE_GOOGLE_PLACES_API_KEY),
+  viteHasPlaceId: Boolean(process.env.VITE_GOOGLE_PLACE_ID),
+});
 
   if (!apiKey || !placeId) {
     return res.status(500).json({

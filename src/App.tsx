@@ -12,6 +12,13 @@ type GoogleReview = {
   googleMapsUri: string | null
 }
 
+type GoogleReviewsResponse = {
+  error?: string
+  rating?: number
+  totalReviews?: number
+  reviews?: GoogleReview[]
+}
+
 const services = [
   ['Dental Implants', 'Permanent tooth replacement using titanium implants.'],
   ['Full Mouth Rehabilitation', 'Complete restoration of your entire smile.'],
@@ -57,6 +64,12 @@ const reviews = [
 
 const navItems = ['Services', 'Doctors', 'Gallery', 'Reviews', 'Contact']
 
+function StarRating({ rating }: { rating: number }) {
+  const filledStars = Math.max(0, Math.min(5, Math.round(rating)))
+
+  return <span aria-label={`${rating.toFixed(1)} out of 5 stars`}>{'★'.repeat(filledStars)}{'☆'.repeat(5 - filledStars)}</span>
+}
+
 function GalleryCard({ item }: { item: string[] }) {
   const [split, setSplit] = useState(50)
   const [title, before, after] = item
@@ -78,20 +91,24 @@ function App() {
     date: '',
   })
   const [googleReviews, setGoogleReviews] = useState<GoogleReview[] | null>(null)
+  const [googleRating, setGoogleRating] = useState<number | null>(null)
+  const [googleReviewCount, setGoogleReviewCount] = useState<number | null>(null)
   const [googleReviewsError, setGoogleReviewsError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchGoogleReviews = async () => {
       try {
         const response = await fetch('/api/google-reviews')
-        const payload = await response.json()
+        const payload = await response.json() as GoogleReviewsResponse
 
         if (!response.ok) {
-          setGoogleReviewsError(payload.error || 'Unable to load reviews')
+          setGoogleReviewsError(typeof payload.error === 'string' ? payload.error : 'Unable to load reviews')
           return
         }
 
         setGoogleReviews(payload.reviews || [])
+        setGoogleRating(typeof payload.rating === 'number' ? payload.rating : null)
+        setGoogleReviewCount(typeof payload.totalReviews === 'number' ? payload.totalReviews : null)
       } catch (error) {
         console.error('Failed to fetch Google reviews', error)
         setGoogleReviewsError('Unable to load reviews')
@@ -104,6 +121,9 @@ function App() {
   const reviewItems = googleReviews
     ? googleReviews.map((review) => [review.author, review.relativeTime || 'Google review', review.text] as const)
     : reviews
+  const displayedRating = googleRating ?? 4.9
+  const displayedReviewCount = googleReviewCount ?? 112
+  const isUsingLiveReviewSummary = googleRating !== null || googleReviewCount !== null
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target
@@ -157,7 +177,7 @@ function App() {
       <section className="hero">
         <img src="/images/hero-clinic.jpg" alt="Saraswati Dental Clinic" className="hero-image" />
         <div className="hero-shade" />
-        <div className="container hero-content"><p className="eyebrow light">Gurugram's Trusted Dental Experts</p><h1>Your Trusted<br />Dental Implant &<br />Smile Care Destination</h1><p className="hero-copy">Advanced Dental Implants, Cosmetic Dentistry, Smile Makeovers, Root Canal Treatments &amp; Complete Oral Care Under One Roof.</p><div className="hero-pills"><span>★ 4.9 Google Rating</span><span>◎ 112+ Reviews</span><span>✦ Multispeciality Care</span></div><div className="hero-actions"><a className="button blue" href="#book">Book Consultation <b>→</b></a><a className="button ghost" href="https://wa.me/916360454121">◔ WhatsApp Us</a></div></div>
+        <div className="container hero-content"><p className="eyebrow light">Gurugram's Trusted Dental Experts</p><h1>Your Trusted<br />Dental Implant &<br />Smile Care Destination</h1><p className="hero-copy">Advanced Dental Implants, Cosmetic Dentistry, Smile Makeovers, Root Canal Treatments &amp; Complete Oral Care Under One Roof.</p><div className="hero-pills"><span>★ {displayedRating.toFixed(1)} Google Rating</span><span>◎ {displayedReviewCount}{isUsingLiveReviewSummary ? '' : '+'} Reviews</span><span>✦ Multispeciality Care</span></div><div className="hero-actions"><a className="button blue" href="#book">Book Consultation <b>→</b></a><a className="button ghost" href="https://wa.me/916360454121">◔ WhatsApp Us</a></div></div>
       </section>
 
       <section id="services" className="section white"><div className="container"><p className="eyebrow blue-text">Our Services</p><h2>Comprehensive Dental Care</h2><p className="lead">From preventive care to advanced cosmetic procedures, we offer a complete range of dental treatments using cutting-edge technology.</p><div className="services-grid">{services.map(([title, text]) => <article className="service-card" key={title}><div className="service-icon">✦</div><h3>{title}</h3><p>{text}</p><a href="#book">Learn More <b>→</b></a></article>)}</div></div></section>
@@ -168,7 +188,7 @@ function App() {
 
       <section id="gallery" className="section gallery"><div className="container"><div className="center"><p className="eyebrow cyan">Smile Gallery</p><h2>Smile Transformations</h2><p className="lead">Real results from real patients. See the life-changing transformations achieved at Saraswati Dental.</p></div><div className="gallery-grid">{gallery.map((item) => <GalleryCard item={item} key={item[0]} />)}</div></div></section>
 
-      <section id="reviews" className="section white"><div className="container reviews-layout"><div className="review-summary"><p className="eyebrow blue-text">Testimonials</p><h2>What Our Patients Say</h2><strong>4.9</strong><div className="stars">★★★★★</div><p>Rated <b>Excellent</b> by our patients</p><p><b>112+</b> Google Reviews</p>{googleReviewsError ? <p className="lead" style={{ color: '#ffb3b3', marginTop: '16px' }}>Unable to load live Google reviews; showing fallback testimonials.</p> : null}</div><div className="review-scroll">{reviewItems.map(([name, treatment, text]) => <article className="review-card" key={`${name}-${treatment}-${text.slice(0, 12)}`}><i>“</i><p>{text}</p><div className="stars small">★★★★★</div><h3>{name}</h3><span>{treatment}</span></article>)}</div></div></section>
+      <section id="reviews" className="section white"><div className="container reviews-layout"><div className="review-summary"><p className="eyebrow blue-text">Testimonials</p><h2>What Our Patients Say</h2><strong>{displayedRating.toFixed(1)}</strong><div className="stars"><StarRating rating={displayedRating} /></div><p>Rated <b>Excellent</b> by our patients</p><p><b>{displayedReviewCount}{isUsingLiveReviewSummary ? '' : '+'}</b> Google Reviews</p>{googleReviewsError ? <p className="lead" style={{ color: '#ffb3b3', marginTop: '16px' }}>Unable to load live Google reviews; showing fallback testimonials.</p> : null}</div><div className="review-scroll">{googleReviews ? googleReviews.map((review) => <article className="review-card" key={review.id}><i>“</i><p>{review.text}</p><div className="stars small"><StarRating rating={review.rating} /></div><h3>{review.author}</h3><span>{review.relativeTime || 'Google review'}</span></article>) : reviewItems.map(([name, treatment, text]) => <article className="review-card" key={`${name}-${treatment}-${text.slice(0, 12)}`}><i>“</i><p>{text}</p><div className="stars small">★★★★★</div><h3>{name}</h3><span>{treatment}</span></article>)}</div></div></section>
 
       <section id="book" className="section booking"><div className="container"><p className="eyebrow blue-text">Book Appointment</p><h2>Get Your Personalized Treatment Plan</h2><div className="booking-grid"><div className="form-card">{submitted ? <div className="thank-you"><span>✓</span><h3>Thank You!</h3><p>We've sent your request to WhatsApp. Our team will get back to you within 30 minutes.</p></div> : <form onSubmit={handleSubmit}><label>Your Name<input required name="name" value={formData.name} onChange={handleInputChange} placeholder="Enter your full name" /></label><label>Phone Number<input required type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Enter your phone number" /></label><label>Treatment Interest<select required name="treatment" value={formData.treatment} onChange={handleInputChange}><option value="" disabled>Select a treatment</option>{services.slice(0, 8).map(([name]) => <option key={name}>{name}</option>)}</select></label><label>Preferred Date<input required type="date" name="date" value={formData.date} onChange={handleInputChange} /></label><button className="button blue" type="submit">Request Callback</button></form>}</div><div className="contact-list"><h3>Or reach us directly:</h3><p><b>◉ Phone</b><a href="tel:+916360454121">+91 63604 54121</a></p><p><b>⌖ Address</b><span>1st Floor, H. No 102/8, Behind Pasricha Hospital, Model Town, Sector 11, Gurugram, Haryana 122001</span></p><p><b>◷ Clinic Hours</b><span>Mon - Sat: 10:00 AM - 8:00 PM<br />Sunday: 10:00 AM - 2:00 PM</span></p><a className="button whatsapp" href="https://wa.me/916360454121">◔ Chat on WhatsApp</a></div></div></div></section>
     </main>

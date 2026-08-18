@@ -38,14 +38,13 @@ const benefits = [
   ['✦', 'Sterilization & Safety', 'Stringent protocols ensuring your safety with every procedure.'],
   ['⌁', 'Advanced Technology', 'State-of-the-art equipment for precise diagnostics and treatment.'],
   ['♡', 'Gentle Care', 'A patient-first approach that prioritizes your comfort at every step.'],
-  ['◉', 'Experienced Specialists', 'MDS-qualified dentists with 12+ years of expertise.'],
+  ['◉', 'Specialist Care', 'Focused expertise in dental implantology and smile design.'],
   ['₹', 'Transparent Pricing', 'Clear treatment costs with no hidden charges.'],
   ['◌', 'Personalized Plans', 'Every treatment customized to your unique dental needs.'],
 ]
 
 const doctors = [
-  { name: 'Dr. Prateek Agarwal', role: 'Chief Dental Surgeon & Implantologist', credentials: 'BDS, MDS (Prosthodontics)', experience: '12+', image: '/images/doctor-prateek.jpg', specialties: ['Dental Implants', 'Full Mouth Rehabilitation', 'Cosmetic Dentistry', 'Crown & Bridge'] },
-  { name: 'Dr. Aditi', role: 'Senior Dental Surgeon & Cosmetic Dentist', credentials: 'BDS, MDS (Conservative Dentistry)', experience: '8+', image: '/images/doctor-aditi.jpg', specialties: ['Smile Makeovers', 'Root Canal Treatment', 'Veneers & Laminates', 'Teeth Whitening'] },
+  { name: 'Dr. Vibhor Azad', role: 'Dental Surgeon', credentials: 'BDS | Fellowship in Dental Implantology, Bangalore | Fellowship in Smile Design, Bangalore', image: '/images/dr-vibhor-azad.jpg', specialties: ['Dental Implantology', 'Smile Design'] },
 ]
 
 const gallery = [
@@ -56,8 +55,8 @@ const gallery = [
 ]
 
 const reviews = [
-  ['Rahul Sharma', 'Dental Implants', 'Got my dental implant done by Dr. Prateek. The procedure was completely painless and the result is amazing. Highly recommend for anyone looking for implant treatment in Gurugram.'],
-  ['Priya Gupta', 'Smile Makeover', "Dr. Aditi transformed my smile completely! I was always conscious about my teeth, but after the smile makeover, I can't stop smiling. The team is so friendly and professional."],
+  ['Rahul Sharma', 'Dental Implants', 'The implant procedure was completely painless and the result is amazing. Highly recommended for anyone looking for implant treatment in Gurugram.'],
+  ['Priya Gupta', 'Smile Makeover', "My smile was transformed completely. I was always conscious about my teeth, but now I can't stop smiling. The team is so friendly and professional."],
   ['Ankit Patel', 'Root Canal', 'Best dental clinic in Model Town. The technology they use is top-notch. Got my root canal done in a single visit. No pain at all!'],
   ['Sneha Verma', 'Family Dental Care', "My entire family comes here for dental care. From my daughter's braces to my father's implants, they've handled everything with such care."],
 ]
@@ -149,7 +148,7 @@ function App() {
   return <div>
     <nav className="site-nav">
       <div className="container nav-inner">
-        <a href="#top" className="brand">SARASWATI</a>
+        <a href="#top" className="brand" aria-label="Saraswati Dental Clinic home"><img src="/images/saraswati-logo.jpg" alt="Saraswati Dental Clinic and Implant Centre" /></a>
         <div className="nav-actions">
           <div className="nav-links">{navItems.map((label) => <a key={label} href={`#${label.toLowerCase()}`} onClick={() => setMenuOpen(false)}>{label}</a>)}</div>
           <a className="nav-button" href="#book" onClick={() => setMenuOpen(false)}>Book Consultation</a>
@@ -174,14 +173,16 @@ function App() {
       <section className="hero">
         <img src="/images/hero-clinic.jpg" alt="Saraswati Dental Clinic" className="hero-image" />
         <div className="hero-shade" />
-        <div className="container hero-content"><p className="eyebrow light">Gurugram's Trusted Dental Experts</p><h1>Your Trusted<br />Dental Implant &<br />Smile Care Destination</h1><p className="hero-copy">Advanced Dental Implants, Cosmetic Dentistry, Smile Makeovers, Root Canal Treatments &amp; Complete Oral Care Under One Roof.</p><div className="hero-pills"><span>★ {displayedRating.toFixed(1)} Google Rating</span><span>◎ {displayedReviewCount}{isUsingLiveReviewSummary ? '' : '+'} Reviews</span><span>✦ Multispeciality Care</span></div><div className="hero-actions"><a className="button blue" href="#book">Book Consultation <b>→</b></a><a className="button ghost" href="https://wa.me/916360454121">◔ WhatsApp Us</a></div></div>
+        <div className="container hero-content"><p className="eyebrow light">Gurugram's Trusted Dental Experts</p><h1>Your Trusted<br />Dental Implant &<br />Smile Care Destination</h1><p className="hero-copy">Advanced Dental Implants, Cosmetic Dentistry, Smile Makeovers, Root Canal Treatments &amp; Complete Oral Care Under One Roof.</p><div className="hero-pills"><span>★ {displayedRating.toFixed(1)} Google Rating</span><span>◎ {displayedReviewCount}{isUsingLiveReviewSummary ? '' : '+'} Reviews</span><span>✦ Multispeciality Care</span></div>
+        {/* <div className="hero-actions"><a className="button blue" href="#book">Book Consultation <b>→</b></a><a className="button ghost" href="https://wa.me/916360454121">◔ WhatsApp Us</a></div> */}
+        </div>
       </section>
 
       <section id="services" className="section white"><div className="container"><p className="eyebrow blue-text">Our Services</p><h2>Comprehensive Dental Care</h2><p className="lead">From preventive care to advanced cosmetic procedures, we offer a complete range of dental treatments using cutting-edge technology.</p><div className="services-grid">{services.map(([title, text]) => <article className="service-card" key={title}><div className="service-icon">✦</div><h3>{title}</h3><p>{text}</p><a href="#book">Learn More <b>→</b></a></article>)}</div></div></section>
 
       <section className="section why"><div className="container why-grid"><div><p className="eyebrow cyan">Why Saraswati Dental</p><h2>Excellence in Every Smile</h2><p className="lead">We combine clinical expertise with advanced technology to deliver exceptional dental care that prioritizes your comfort and long-term oral health.</p></div><div className="benefit-grid">{benefits.map(([icon, title, text]) => <article className="benefit" key={title}><span>{icon}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-      <section id="doctors" className="section white"><div className="container"><div className="center"><p className="eyebrow blue-text">Meet Our Experts</p><h2>Our Doctors</h2></div><div className="doctor-grid">{doctors.map((doctor) => <article className="doctor-card" key={doctor.name}><div className="doctor-photo"><img src={doctor.image} alt={doctor.name} /><span>{doctor.experience} Years</span></div><div className="doctor-info"><h3>{doctor.name}</h3><h4>{doctor.role}</h4><p>{doctor.credentials}</p><div>{doctor.specialties.map((specialty) => <span className="tag" key={specialty}>{specialty}</span>)}</div><a href="#book">View Profile →</a></div></article>)}</div></div></section>
+      <section id="doctors" className="section white"><div className="container"><div className="center"><p className="eyebrow blue-text">Meet Our Expert</p><h2>Our Doctor</h2></div><div className="doctor-grid">{doctors.map((doctor) => <article className="doctor-card" key={doctor.name}><div className="doctor-photo"><img src={doctor.image} alt={doctor.name} /></div><div className="doctor-info"><h3>{doctor.name}</h3><h4>{doctor.role}</h4><p>{doctor.credentials}</p><div>{doctor.specialties.map((specialty) => <span className="tag" key={specialty}>{specialty}</span>)}</div><a href="#book">Book a Consultation →</a></div></article>)}</div></div></section>
 
       <section id="gallery" className="section gallery"><div className="container"><div className="center"><p className="eyebrow cyan">Smile Gallery</p><h2>Smile Transformations</h2><p className="lead">Real results from real patients. See the life-changing transformations achieved at Saraswati Dental.</p></div><div className="gallery-grid">{gallery.map((item) => <GalleryCard item={item} key={item[0]} />)}</div></div></section>
 
@@ -199,7 +200,7 @@ function App() {
         </svg>
       </a>
       <a className="floating-button floating-call" href="tel:+916360454121" aria-label="Call clinic">☎</a>
-      <a className="floating-button floating-book" href="#book" aria-label="Book consultation">📅</a>
+      {/* <a className="floating-button floating-book" href="#book" aria-label="Book consultation">📅</a> */}
     </div>
   </div>
 }

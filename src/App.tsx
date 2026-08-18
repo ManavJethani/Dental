@@ -44,7 +44,7 @@ const benefits = [
 ]
 
 const doctors = [
-  { name: 'Dr. Vibhor Azad', role: 'Dental Surgeon', credentials: 'BDS | Fellowship in Dental Implantology, Bangalore | Fellowship in Smile Design, Bangalore', image: '/images/dr-vibhor-azad.jpg', specialties: ['Dental Implantology', 'Smile Design'] },
+  { name: 'Dr. Vibhor Azad', credentials: 'BDS | Fellowship in Dental Implantology (Bangalore) | Fellowship in Smile Design (Bangalore)', image: '/images/dr-vibhor-azad.jpg' },
 ]
 
 const gallery = [
@@ -182,7 +182,7 @@ function App() {
 
       <section className="section why"><div className="container why-grid"><div><p className="eyebrow cyan">Why Saraswati Dental</p><h2>Excellence in Every Smile</h2><p className="lead">We combine clinical expertise with advanced technology to deliver exceptional dental care that prioritizes your comfort and long-term oral health.</p></div><div className="benefit-grid">{benefits.map(([icon, title, text]) => <article className="benefit" key={title}><span>{icon}</span><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>
 
-      <section id="doctors" className="section white"><div className="container"><div className="center"><p className="eyebrow blue-text">Meet Our Expert</p><h2>Our Doctor</h2></div><div className="doctor-grid">{doctors.map((doctor) => <article className="doctor-card" key={doctor.name}><div className="doctor-photo"><img src={doctor.image} alt={doctor.name} /></div><div className="doctor-info"><h3>{doctor.name}</h3><h4>{doctor.role}</h4><p>{doctor.credentials}</p><div>{doctor.specialties.map((specialty) => <span className="tag" key={specialty}>{specialty}</span>)}</div><a href="#book">Book a Consultation →</a></div></article>)}</div></div></section>
+      <section id="doctors" className="section white"><div className="container"><div className="center"><p className="eyebrow blue-text">Meet Our Expert</p><h2>Our Doctor</h2></div><div className="doctor-grid">{doctors.map((doctor) => <article className="doctor-card" key={doctor.name}><div className="doctor-photo"><img src={doctor.image} alt={doctor.name} /></div><div className="doctor-info"><h3>{doctor.name}</h3><p>{doctor.credentials}</p><a href="#book">Book a Consultation →</a></div></article>)}</div></div></section>
 
       <section id="gallery" className="section gallery"><div className="container"><div className="center"><p className="eyebrow cyan">Smile Gallery</p><h2>Smile Transformations</h2><p className="lead">Real results from real patients. See the life-changing transformations achieved at Saraswati Dental.</p></div><div className="gallery-grid">{gallery.map((item) => <GalleryCard item={item} key={item[0]} />)}</div></div></section>
 
